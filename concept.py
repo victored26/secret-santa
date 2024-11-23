@@ -12,7 +12,7 @@ def assignID(names: list[str]):
 def pairIDs(length: int):
     """Pairs IDs such that no ID is paired with itself and no two pairs
     of IDs are exclusively paired to each other"""
-    # For these conditions to hold, the IDs must be assigned such that
+    # For these conditions to always hold, the IDs must be assigned such that
     # there exists exactly one closed loop
     pairings = {j:j for j in range(1, length+1)}
     giftee = randint(2, length)
@@ -24,4 +24,5 @@ def pairIDs(length: int):
             giftee = randint(2, length)
         pairings[gifter] = giftee
         drawn.add(giftee)
+    pairings[giftee] = 1
     return pairings
