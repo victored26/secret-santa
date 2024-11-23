@@ -34,6 +34,8 @@ def pairIDs(length: int) -> dict:
     return pairings
 
 def pairNames(namesID: dict, pairings: dict) -> dict:
+    """Creates a dictionary consisting of the giftees each gifter 
+    has been assigned"""
     secret_santa = {}
     for key, value in pairings.items():
         secret_santa[namesID[key]] = namesID[value]
