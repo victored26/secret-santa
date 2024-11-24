@@ -61,6 +61,7 @@ function removeEntry(removeID) {
                 return 
             }
             node.id = `name-${curID-1}`;
+            node.placeholder = `Enter Name ${curID-1}`;
         }
     );
 
@@ -74,10 +75,6 @@ function removeEntry(removeID) {
             node.id = `remove-name-${curID-1}`;
         }
     );
-    
-    //  Update the very last entry so that the placeholder text is correct
-    const lastEntry = document.getElementById(`name-${lastID}`);
-    lastEntry.placeholder = `Enter Name ${lastID}`;
 }
 
 function pairIDs(lastID) {
