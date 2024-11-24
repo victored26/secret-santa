@@ -1,6 +1,9 @@
 const names = document.getElementById('names');
+const submit = document.getElementById("submit");
+const namesID = {};
 let lastID = 0;
 addNewEntry();
+submit.addEventListener('click', submitNames);
 
 function addNewEntry() {
     /* Loads a new input text and remove button when the very last entry
@@ -73,6 +76,42 @@ function removeEntry(removeID) {
                 return 
             }
             node.id = `remove-name-${curID-1}`;
+        }
+    );
+}
+
+function submitNames() {
+    deleteEmptyEntries();
+    if (lastID < 4) {
+        return
+    }
+    entriesToNameIDs(namesID);
+}
+
+function deleteEmptyEntries() {
+    /* Deletes all the empty entries except for the very last entry.*/
+    let entry;
+    let id = 1;
+    while (id < lastID) {
+        entry = document.getElementById(`name-${id}`);
+        if (entry.value == "") {
+            removeEntry(id);
+        } else{
+            id++;
+        }
+    }
+}
+
+function entriesToNameIDs(nameIDs) {
+    /* Creates a dictionary mapping IDs to names */
+    const entries = Array.from(document.querySelectorAll("input"));
+    entries.forEach(
+        node => {
+            const nodeID = parseInt(node.id.replace("name-", ""));
+            if (nodeID == lastID) {
+                return
+            }
+            namesID[nodeID] = node.value;
         }
     );
 }
