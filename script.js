@@ -1,6 +1,5 @@
 const names = document.getElementById('names');
 const submit = document.getElementById("submit");
-const namesID = {};
 let lastID = 0;
 addNewEntry();
 submit.addEventListener('click', submitNames);
@@ -81,11 +80,14 @@ function removeEntry(removeID) {
 }
 
 function submitNames() {
+    /* Submits the names as long as there are at least three names. The names
+    are then paired accordingly, and the user is sent to the results page. */
     deleteEmptyEntries();
     if (lastID < 4) {
         return
     }
-    entriesToNameIDs(namesID);
+    secretSanta();
+    window.location.assign('results.html');
 }
 
 function deleteEmptyEntries() {
@@ -102,8 +104,9 @@ function deleteEmptyEntries() {
     }
 }
 
-function entriesToNameIDs(nameIDs) {
+function entriesToNameIDs() {
     /* Creates a dictionary mapping IDs to names */
+    const nameIDs = {};
     const entries = Array.from(document.querySelectorAll("input"));
     entries.forEach(
         node => {
@@ -111,25 +114,26 @@ function entriesToNameIDs(nameIDs) {
             if (nodeID == lastID) {
                 return
             }
-            namesID[nodeID] = node.value;
+            nameIDs[nodeID] = node.value;
         }
     );
+    return nameIDs
 }
 
-function pairIDs(lastID) {
+function pairIDs(lastValidID) {
     /* Pairs IDs such that no ID is paired with itself and no two pairs
     of IDs are exclusively paired to each other. To ensure these conditions
     always hold, the resulting pairings must form a polygon */
     const pairings = {};
     const drawn = new Set();
     let gifter = 1;
-    let giftee = Math.floor(Math.random()*(lastID-1)) + 2;
+    let giftee = Math.floor(Math.random()*(lastValidID-1)) + 2;
     pairings[gifter] = giftee;
     drawn.add([gifter, giftee]);
-    while (drawn.size < lastID) {
+    while (drawn.size < lastValidID) {
         gifter = giftee;
         while (drawn.has(giftee)) {
-            giftee = Math.floor(Math.random()*(lastID-1)) + 2;
+            giftee = Math.floor(Math.random()*(lastValidID-1)) + 2;
         }
         pairings[gifter] = giftee;
         drawn.add(giftee);
@@ -148,16 +152,7 @@ function pairNames(nameIDs, pairings) {
     return secretSanta
 }
 
-function secretSantaJSON(secretSanta) {
-    /* Converts the secret santa to a JSON */
-    return JSON.stringify(secretSanta);
-}
-
-function secretSantaCSV(secretSanta) {
-    /* Converts the secret santa to a CSV */
-    const csvRows = ["gifter,giftee"];
-    for (let [gifter, giftee] of Object.entries(secretSanta)) {
-        csvRows.push(`${gifter},${giftee}`);
-    }
-    return csvRows.join('\n')
+function secretSanta() {
+    const results = pairNames(entriesToNameIDs(), pairIDs(lastID-1));
+    sessionStorage.setItem('secretSanta', JSON.stringify(results));
 }
