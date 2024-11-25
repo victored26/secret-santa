@@ -1,6 +1,8 @@
 const secretSanta = JSON.parse(sessionStorage.getItem('secretSanta'));
 const results = document.getElementById("results");
 const downloads = document.getElementById("downloads");
+const goBack = document.getElementById("goBack");
+goBack.addEventListener("click", goBackAction);
 displaySecretSanta();
 
 function displaySecretSanta() {
@@ -46,4 +48,9 @@ function secretSantaCSV() {
         csvRows.push(`${gifter},${giftee}`);
     }
     return csvRows.join('\n')
+}
+
+function goBackAction() {
+    /* Returns the user to the initial page */
+    window.location.assign('index.html');
 }
