@@ -1,8 +1,19 @@
 const names = document.getElementById('names');
 const submit = document.getElementById("submit");
+const session = JSON.parse(sessionStorage.getItem('secretSanta'));
 let lastID = 0;
 addNewEntry();
+populateExistingEntries(session);
 submit.addEventListener('click', submitNames);
+
+function populateExistingEntries(session) {
+    /* Repopulates the entries with the names that were submitted by
+    the user */
+    for (let name in session) {
+        document.getElementById(`name-${lastID}`).value = name;
+        addNewEntry();
+    }
+}
 
 function addNewEntry() {
     /* Loads a new input text and remove button when the very last entry
