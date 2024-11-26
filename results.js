@@ -1,16 +1,25 @@
 const secretSanta = JSON.parse(sessionStorage.getItem('secretSanta'));
-const results = document.getElementById("results");
 const downloads = document.getElementById("downloads");
 const goBack = document.getElementById("goBack");
 goBack.addEventListener("click", goBackAction);
 displaySecretSanta();
 
-function displaySecretSanta() {
+function resultsTable() {
+    const results = document.getElementById("results");
+    let counter = 0;
     for (let [gifter, giftee] of Object.entries(secretSanta)) {
-        let node = document.createElement("h3");
-        node.innerHTML = `${gifter} &#8702; ${giftee}`;
-        results.appendChild(node);
+        let row = results.insertRow(-1);
+        let colOne = row.insertCell(0);
+        let colTwo = row.insertCell(1);
+        colOne.innerHTML = `${gifter}`;
+        colTwo.innerHTML = `${giftee}`;
+        let className = counter++ % 2 == 0? "table-success" : "table-danger";
+        row.classList.add(className);
     }
+}
+
+function displaySecretSanta() {
+    resultsTable();
     downloadJSON();
     downloadCSV();
 }

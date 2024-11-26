@@ -24,8 +24,16 @@ function addNewEntry() {
         document.getElementById(`remove-name-${lastID}`).style.display = "initial";
     }
     lastID++;
+    createNewEntryDiv();
     createNewEntry();
     createRemoveEntryButton();
+}
+
+function createNewEntryDiv() {
+    const container = document.createElement("div");
+    container.setAttribute("id", `div-${lastID}`);
+    container.setAttribute("class", `entries`);
+    names.appendChild(container);
 }
 
 function createNewEntry() {
@@ -33,7 +41,7 @@ function createNewEntry() {
     const entry = document.createElement("input");
     entry.setAttribute("id", `name-${lastID}`);
     entry.setAttribute("placeholder", `Enter Name ${lastID}`);
-    names.appendChild(entry);
+    document.getElementById(`div-${lastID}`).appendChild(entry);
     document.getElementById(`name-${lastID}`).addEventListener(
         'input', addNewEntry);
 }
@@ -41,10 +49,10 @@ function createNewEntry() {
 function createRemoveEntryButton() {
     /* Creates a button which allows the user to delete a given entry */
     const removeButton = document.createElement("button");
-    removeButton.innerText = "Remove";
-    removeButton.setAttribute("class", "removeEntry");
+    removeButton.innerHTML = "x";
+    removeButton.setAttribute("class", "btn btn-outline-danger removeEntry");
     removeButton.setAttribute("id", `remove-name-${lastID}`);
-    names.appendChild(removeButton);
+    document.getElementById(`div-${lastID}`).appendChild(removeButton);
     removeButton.addEventListener(
         "click", event => {
             let removeID = parseInt(event.target.id.replace("remove-name-", ""));
@@ -60,12 +68,22 @@ function removeEntry(removeID) {
     /* Deletes the specified entry, and updates the remaining entries
     such that their IDs are in the correct order */
 
-    // Remove the entry with ID equal to remove ID
-    document.getElementById(`name-${removeID}`).remove();
-    document.getElementById(`remove-name-${removeID}`).remove();
+    // Remove the entry div with ID equal to remove ID
+    document.getElementById(`div-${removeID}`).remove();
     lastID--;
 
     // Update the IDs with ID > removeID
+    const containers = Array.from(document.querySelectorAll("div.entries"));
+    containers.forEach(
+        container => {
+            curID = parseInt(container.id.replace("div-", ""));
+            if (curID < removeID) {
+                return 
+            }
+            container.id = `div-${curID-1}`;
+        }
+    );
+
     const entries = Array.from(document.querySelectorAll("input"));
     entries.forEach(
         node => {
