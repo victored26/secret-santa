@@ -1,5 +1,5 @@
 const secretSanta = JSON.parse(sessionStorage.getItem('secretSanta'));
-const downloads = document.getElementById("downloads");
+const actions = document.getElementById("actions");
 const goBack = document.getElementById("goBack");
 goBack.addEventListener("click", goBackAction);
 displaySecretSanta();
@@ -31,10 +31,11 @@ function downloadJSON() {
     );
     const url = URL.createObjectURL(blob);
     const node = document.createElement("a");
+    node.setAttribute("class", "btn btn-success")
     node.setAttribute("href", url);
     node.setAttribute("download", "secret_santa.json");
     node.textContent = "Download as JSON";
-    downloads.appendChild(node); 
+    actions.appendChild(node); 
 }
 
 function downloadCSV() {
@@ -44,10 +45,11 @@ function downloadCSV() {
     );
     const url = URL.createObjectURL(blob);
     const node = document.createElement("a");
+    node.setAttribute("class", "btn btn-success")
     node.setAttribute("href", url);
     node.setAttribute("download", "secret_santa.csv");
     node.textContent = "Download as CSV";
-    downloads.appendChild(node); 
+    actions.appendChild(node); 
 }
 
 function secretSantaCSV() {
