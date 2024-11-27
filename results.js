@@ -4,7 +4,15 @@ const goBack = document.getElementById("goBack");
 goBack.addEventListener("click", goBackAction);
 displaySecretSanta();
 
+function displaySecretSanta() {
+    /* Displays the results and the download buttons */
+    resultsTable();
+    downloadJSON();
+    downloadCSV();
+}
+
 function resultsTable() {
+    /* Creates the results table */
     const results = document.getElementById("results");
     let counter = 0;
     for (let [gifter, giftee] of Object.entries(secretSanta)) {
@@ -18,13 +26,8 @@ function resultsTable() {
     }
 }
 
-function displaySecretSanta() {
-    resultsTable();
-    downloadJSON();
-    downloadCSV();
-}
-
 function downloadJSON() {
+    /* Creates a button to download results as a JSON */
     const blob = new Blob(
         [JSON.stringify(secretSanta, null, 2)],
         {type: 'application/json'}
@@ -39,6 +42,7 @@ function downloadJSON() {
 }
 
 function downloadCSV() {
+    /* Creates a button to download results as a CSV */
     const blob = new Blob(
         [secretSantaCSV()],
         {type: 'application/csv'}

@@ -30,6 +30,7 @@ function addNewEntry() {
 }
 
 function createNewEntryDiv() {
+    /* Creates a container for input text and delete button */
     const container = document.createElement("div");
     container.setAttribute("id", `div-${lastID}`);
     container.setAttribute("class", `entries`);
@@ -44,6 +45,7 @@ function createNewEntry() {
     document.getElementById(`div-${lastID}`).appendChild(entry);
     document.getElementById(`name-${lastID}`).addEventListener(
         'input', addNewEntry);
+    document.getElementById(`name-${lastID}`).scrollIntoView({behavior: "smooth"});
 }
 
 function createRemoveEntryButton() {
@@ -111,7 +113,7 @@ function removeEntry(removeID) {
 function submitNames() {
     /* Submits the names as long as there are at least three names. The names
     are then paired accordingly, and the user is sent to the results page. */
-    deleteEmptyEntries();
+    validateEntries();
     if (lastID < 4) {
         return
     }
@@ -119,15 +121,15 @@ function submitNames() {
     window.location.assign('results.html');
 }
 
-function deleteEmptyEntries() {
-    /* Deletes all the empty entries except for the very last entry.*/
-    let entry;
+function validateEntries() {
+    /* Deletes all empty and duplicate entries*/
     let id = 1;
+    const nameSet = new Set([""]);
     while (id < lastID) {
-        entry = document.getElementById(`name-${id}`);
-        if (entry.value == "") {
+        if (nameSet.has(document.getElementById(`name-${id}`).value)) {
             removeEntry(id);
         } else{
+            nameSet.add(document.getElementById(`name-${id}`).value);
             id++;
         }
     }
@@ -172,8 +174,8 @@ function pairIDs(lastValidID) {
 }
 
 function pairNames(nameIDs, pairings) {
-    /*Creates a dictionary consisting of the giftees each gifter 
-    has been assigned*/
+    /* Creates a dictionary consisting of the giftees each gifter 
+    has been assigned */
     const secretSanta = {};
     for (let [gifter, giftee] of Object.entries(pairings)) {
         secretSanta[nameIDs[gifter]] = nameIDs[giftee];
@@ -182,6 +184,8 @@ function pairNames(nameIDs, pairings) {
 }
 
 function secretSanta() {
+    /* Translates ID pairings to name pairings and records results in 
+    session storage */
     const results = pairNames(entriesToNameIDs(), pairIDs(lastID-1));
     sessionStorage.setItem('secretSanta', JSON.stringify(results));
 }
